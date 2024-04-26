@@ -1,0 +1,35 @@
+device:
+  mono_ll:
+    id: "001"
+  mono_lf:
+    id: "002"
+  mono_rf:
+    id: "003"
+  mono_rr:
+    id: "004"
+  mic:
+    id: "005"
+
+class:
+  Advance:
+    id: "001"
+  Attention:
+    id: "002"
+  Deictic:
+    id: "003"
+  FollowMe:
+    id: "004"
+  GoLeft:
+    id: "005"
+  GoRight:
+    id: "006"
+  Halt:
+    id: "007"
+  MoveForward:
+    id: "008"
+  MoveInReverse:
+    id: "009"
+  Rally:
+    id: "010"
+  Stop:
+    id: "011"
