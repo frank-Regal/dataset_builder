@@ -6,34 +6,46 @@ from datetime import datetime
 from std_msgs.msg import Empty
 
 class ConfigParams():
+    
+    '''
+    initialize the ros params
+    '''
     def __init__(self):
         # get params
         start_topic_name = rospy.get_param('/start_topic_name', 'n/a')
         stop_topic_name = rospy.get_param('/stop_topic_name', 'n/a')
         
         # Setup subscribers
-        rospy.Subscriber(stop_topic_name, Empty, self.set_timestamp, queue_size=10)
+        rospy.Subscriber(stop_topic_name, Empty, self.reset_cb, queue_size=10)
 
-        self.class_id = self.set_class_id()
+        self.classname_id = self.set_class_id()
         self.timestamp = self.set_timestamp()
         self.set_filename_per_device()
 
+    '''
+    set class id
+    '''
     def set_class_id(self):
         # get class id
-        class_name = rospy.get_param('/class_name', 'n/a')
-        class_id_param = "/class/" + class_name + "/id"
-        class_id = rospy.get_param(class_id_param, 'n/a')
-        rospy.set_param('/class_name_id', class_id)
-        return class_id
+        classname = rospy.get_param('/classname', 'na')
+        classname_id_param = "/class/" + classname + "/id"
+        classname_id = rospy.get_param(classname_id_param, 'na')
+        rospy.set_param('/classname_id', classname_id)
+        return classname_id
     
+    '''
+    set fileneame per device
+    '''
     def set_filename_per_device(self):
         devices = rospy.get_param('/device/','n/a')
-        print(f"device: {devices}")
         for i, name in enumerate(devices):
             device_id = devices[name]['id']
-            filename = 'S' + self.timestamp + '-D' + device_id + '-C' + self.class_id
+            filename = 'S' + self.timestamp + '-D' + device_id + '-C' + self.classname_id + '.avi'
             rospy.set_param('/'  + name + '/filename', filename)
 
+    '''
+    set timestamp parameter
+    '''
     def set_timestamp(self):
         # Get the current datetime
         now = datetime.now()

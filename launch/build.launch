@@ -5,24 +5,24 @@
     <!-- get input args -->
     <arg name="robofleet" default='false'/>
     <arg name="outdir" default="$(find dataset_builder)/dataset"/>
-    <arg name="class" default="Advance"/>
+    <arg name="classname" default="Advance"/>
     <arg name="bagdata" default='true'/>
-    <arg name="image_fps" default="20"/>
+    <arg name="image_fps" default="10"/>
 
     <!-- configure topics -->
     <arg name="start_topic_name"  default="/hololens/natural_input_capture/start"/>
-    <arg name="stop_topic_name"   default="/hololens/natural_input_capture/end"/>
+    <arg name="stop_topic_name"   default="/hololens/natural_input_capture/stop"/>
     <arg name="mono_ll_topic"     default="/hololens/LEFT_LEFT/image_raw"/>
     <arg name="mono_lf_topic"     default="/hololens/LEFT_FRONT/image_raw"/>
     <arg name="mono_rf_topic"     default="/hololens/RIGHT_FRONT/image_raw"/>
-    <arg name="mono_rr_topic"     default="/hololens/RIGHT_RIGHT/image_raw"/>
+    <arg name="mono_rr_topic"     default="/hololens/RIGHT_RIGHT/image"/>
     <arg name="mic_topic"         default="/hololens/microphone/data"/>
 
     <!-- set params -->
-    <param name="class"    value="$(arg class)"/>
+    <param name="classname"     value="$(arg classname)"/>
     <param name="base_outdir"   value="$(arg outdir)"/>
     <param name="timestamp"     value=""/>
-    <param name="class_name_id" value=""/>
+    <param name="classname_id"  value=""/>
     
     <!-- robofleet client -->
     <group if="$(arg robofleet)" ns="robofleet"> 
@@ -40,10 +40,20 @@
     <node ns="config_params_node" name = "config_params" pkg = "dataset_builder" type = "config_params.py" output = "screen"/>
 
     <!-- mono left left camera stream -->
-    <group ns="mono_ll">
-        <include file="$(find image_writer)/launch/save_raw_image_stream.launch" />
-        <param name ="filepath" value="$(arg outdir)/devices/mono_ll/raw/$(arg class)/"/>
-        <param name ="topicname_image" value="$(arg mono_ll_topic)"/>
+    <!-- <group ns="mono_rr"> -->
+        <!-- <include file="$(find image_writer)/launch/save_raw_image_stream.launch" /> -->
+        <!-- <param name ="filepath" value="$(arg outdir)/devices/mono_rr/raw/$(arg classname)/"/> -->
+        <!-- <param name ="filename" value=""/> -->
+        <!-- <param name ="topicname_image" value="$(arg mono_rr_topic)"/> -->
+        <!-- <param name ="fps" value="$(arg image_fps)"/> -->
+    <!-- </group> -->
+
+    <group ns="mono_rr">
+        <node name="video_writer" pkg="image_writer" type="video_writer.py" output="screen"/>
+        <param name ="filepath" value="$(arg outdir)/devices/mono_rr/raw/$(arg classname)/"/>
+        <param name ="filename" value=""/>
+        <param name ="topicname_image" value="$(arg mono_rr_topic)"/>
+        <param name ="topicname_empty" value="$(arg stop_topic_name)"/>
         <param name ="fps" value="$(arg image_fps)"/>
     </group>
 
