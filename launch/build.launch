@@ -2,27 +2,28 @@
     <!-- load params -->
     <rosparam file="$(find dataset_builder)/params/dicts.yaml" command="load"/>
 
-    <!-- get input args -->
+    <!-- user input args -->
     <arg name="robofleet" default='false'/>
     <arg name="outdir" default="$(find dataset_builder)/dataset"/>
-    <arg name="classname" default="Advance"/>
+    <arg name="classname" default="Attention"/>
     <arg name="bagdata" default='true'/>
     <arg name="image_fps" default="10"/>
 
     <!-- configure topics -->
     <arg name="start_topic_name"  default="/hololens/natural_input_capture/start"/>
     <arg name="stop_topic_name"   default="/hololens/natural_input_capture/stop"/>
-    <arg name="mono_ll_topic"     default="/hololens/LEFT_LEFT/image_raw"/>
-    <arg name="mono_lf_topic"     default="/hololens/LEFT_FRONT/image_raw"/>
-    <arg name="mono_rf_topic"     default="/hololens/RIGHT_FRONT/image_raw"/>
+    <arg name="mono_ll_topic"     default="/hololens/LEFT_LEFT/image"/>
+    <arg name="mono_lf_topic"     default="/hololens/LEFT_FRONT/image"/>
+    <arg name="mono_rf_topic"     default="/hololens/RIGHT_FRONT/image"/>
     <arg name="mono_rr_topic"     default="/hololens/RIGHT_RIGHT/image"/>
     <arg name="mic_topic"         default="/hololens/microphone/data"/>
 
-    <!-- set params -->
-    <param name="classname"     value="$(arg classname)"/>
-    <param name="base_outdir"   value="$(arg outdir)"/>
-    <param name="timestamp"     value=""/>
-    <param name="classname_id"  value=""/>
+    <!-- set global params -->
+    <param name="classname"         value="$(arg classname)"/>
+    <param name="classname_id"      value=""/> <!-- set dynamically in config_params.py-->
+    <param name="timestamp"         value=""/> <!-- set dynamically in config_params.py--> 
+    <param name="base_outdir"       value="$(arg outdir)"/>
+    <param name="stop_topic_name"   value="$(arg stop_topic_name)"/>
     
     <!-- robofleet client -->
     <group if="$(arg robofleet)" ns="robofleet"> 
@@ -36,27 +37,76 @@
 	    />
     </group>
 
-    <!-- config params -->
-    <node ns="config_params_node" name = "config_params" pkg = "dataset_builder" type = "config_params.py" output = "screen"/>
-
+    <!-- config params node -->
+    <node 
+        ns="config_params_node" 
+        name = "config_params" 
+        pkg = "dataset_builder" 
+        type = "config_params.py" 
+        output = "screen"
+    />
+    
     <!-- mono left left camera stream -->
-    <!-- <group ns="mono_rr"> -->
-        <!-- <include file="$(find image_writer)/launch/save_raw_image_stream.launch" /> -->
-        <!-- <param name ="filepath" value="$(arg outdir)/devices/mono_rr/raw/$(arg classname)/"/> -->
-        <!-- <param name ="filename" value=""/> -->
-        <!-- <param name ="topicname_image" value="$(arg mono_rr_topic)"/> -->
-        <!-- <param name ="fps" value="$(arg image_fps)"/> -->
-    <!-- </group> -->
+    <group ns="mono_ll">
+        <include file="$(find image_writer)/launch/save_raw_image_stream.launch" />
+        <param name ="filepath" value="$(arg outdir)/devices/mono_ll/raw/$(arg classname)/"/>
+        <param name ="filename" value=""/>
+        <param name ="topicname_image" value="$(arg mono_ll_topic)"/>
+        <param name ="fps" value="$(arg image_fps)"/>
+        <param name ="use_param_server" value='true'/>
+        <param name ="save_multi_stream_in_sequence" value='true'/>
+    </group>
 
+    <!-- mono left front camera stream -->
+    <group ns="mono_lf">
+        <include file="$(find image_writer)/launch/save_raw_image_stream.launch" />
+        <param name ="filepath" value="$(arg outdir)/devices/mono_lf/raw/$(arg classname)/"/>
+        <param name ="filename" value=""/>
+        <param name ="topicname_image" value="$(arg mono_lf_topic)"/>
+        <param name ="fps" value="$(arg image_fps)"/>
+        <param name ="use_param_server" value='true'/>
+        <param name ="save_multi_stream_in_sequence" value='true'/>
+    </group>
+
+    <!-- mono right front camera stream -->
+    <group ns="mono_rf">
+        <include file="$(find image_writer)/launch/save_raw_image_stream.launch" />
+        <param name ="filepath" value="$(arg outdir)/devices/mono_rf/raw/$(arg classname)/"/>
+        <param name ="filename" value=""/>
+        <param name ="topicname_image" value="$(arg mono_rf_topic)"/>
+        <param name ="fps" value="$(arg image_fps)"/>
+        <param name ="use_param_server" value='true'/>
+        <param name ="save_multi_stream_in_sequence" value='true'/>
+    </group>
+   
+    <!-- mono right right camera stream -->
     <group ns="mono_rr">
-        <node name="video_writer" pkg="image_writer" type="video_writer.py" output="screen"/>
+        <include file="$(find image_writer)/launch/save_raw_image_stream.launch" />
         <param name ="filepath" value="$(arg outdir)/devices/mono_rr/raw/$(arg classname)/"/>
         <param name ="filename" value=""/>
         <param name ="topicname_image" value="$(arg mono_rr_topic)"/>
-        <param name ="topicname_empty" value="$(arg stop_topic_name)"/>
         <param name ="fps" value="$(arg image_fps)"/>
+        <param name ="use_param_server" value='true'/>
+        <param name ="save_multi_stream_in_sequence" value='true'/>
     </group>
 
-
+    <!-- microphone stream -->
+    <group ns="mic">
+        <rosparam file="$(find audio_writer)/params/params.yaml" command="load"/>
+        <param name ="output_directory_" value="$(arg outdir)/devices/mic/raw/$(arg classname)/"/>
+        <param name ="postfix_" value=""/>
+        <param name ="topic_name_" value="$(arg mic_topic)"/>
+        <param name ="use_param_server" value='true'/>
+        <param name ="downsample_" value='false'/>
+        <param name ="queue_size_" value='100'/>
+        <param name="start_recording_topic_" value="$(arg start_topic_name)"/>
+        <param name="stop_recording_topic_" value="$(arg stop_topic_name)"/>
+        <node
+	    	name    = "save_raw_audio_stream"
+	    	pkg     = "audio_writer"
+	    	type    = "save_raw_audio_stream"
+	    	output  = "screen"
+	    /> 
+    </group>
 
 </launch>
