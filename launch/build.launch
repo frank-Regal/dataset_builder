@@ -109,4 +109,21 @@
 	    /> 
     </group>
 
+    <!-- bagger -->
+    <group ns="bag_util">
+        <rosparam file="$(find bag_utility)/params/params.yaml" />
+        <param name="output_directory" value="$(arg outdir)/bags/" />
+        <param name="postfix" value="" />
+        <param name="use_param_server" value='true'/>
+        <param name="start_capture_topicname_" value="$(arg start_topic_name)"/>
+        <param name="stop_capture_topicname_" value="$(arg stop_topic_name)"/>
+        <param name="audio_data_topicname_" value="$(arg mic_topic)"/>
+        <node
+            name    ="save_bags"
+            pkg     ="bag_utility"
+            type    ="save_bags"
+            output  ="screen"
+        />
+    </group>
+
 </launch>

@@ -21,6 +21,9 @@ class ConfigParams():
         self.classname_id = self.set_class_id()
         self.timestamp = self.set_timestamp()
         self.set_filename_per_device()
+        self.set_filename_for_bags()
+
+        self.collection_num = 0
 
     '''
     Set class id
@@ -53,6 +56,10 @@ class ConfigParams():
             filename = 'S' + self.timestamp + '-D' + device_id + '-C' + self.classname_id
             rospy.set_param('/'  + name + '/filename', filename)
 
+    def set_filename_for_bags(self):
+        filename = 'S' + self.timestamp + '-DALL-C' + self.classname_id
+        rospy.set_param('/bag_util/filename', filename)
+
     '''
     Set timestamp parameter
     '''
@@ -76,9 +83,11 @@ class ConfigParams():
         # reset the filenames
         self.timestamp = self.set_timestamp()
         self.set_filename_per_device()
+        self.set_filename_for_bags()
         
         # log
-        rospy.logwarn("Writing Finished. Filenames updated, ready for next set of data.")
+        self.collection_num += 1
+        rospy.logwarn("[Collection Num: %d] Writing Finished. Filenames updated, ready for next set of data.", self.collection_num)
         
 def main():
     # Initialize the ROS node
