@@ -2,6 +2,7 @@
 
 #!/usr/bin/env python
 import rospy
+import os
 from datetime import datetime
 from std_msgs.msg import Empty
 
@@ -13,7 +14,9 @@ class ConfigParams():
     def __init__(self):
         # get params
         stop_topic_name = rospy.get_param('/stop_topic_name', 'n/a')
-        
+        self.outdir = rospy.get_param('/base_outdir', 'n/a')
+        self.classname = rospy.get_param('/classname', 'na')
+
         # setup stop subscribers
         self.stop_sub = rospy.Subscriber(stop_topic_name, Empty, self.reset_cb, queue_size=10)
 
@@ -29,11 +32,9 @@ class ConfigParams():
     Set class id
     '''
     def set_class_id(self):
-        # get current class name
-        classname = rospy.get_param('/classname', 'na')
 
         # dynamically set the class param name
-        classname_id_param = "/class/" + classname + "/id"
+        classname_id_param = "/class/" + self.classname + "/id"
 
         # get the current class id
         classname_id = rospy.get_param(classname_id_param, 'na')
@@ -55,6 +56,27 @@ class ConfigParams():
             device_id = devices[name]['id']
             filename = 'S' + self.timestamp + '-D' + device_id + '-C' + self.classname_id
             rospy.set_param('/'  + name + '/filename', filename)
+            filepath = rospy.get_param('/' + name + '/filepath', 'na')
+            filetype = rospy.get_param('/' + name + '/filetype', 'na')
+            # Find the index where 'devices' starts
+            index = filepath.find('/devices')
+
+                # Slice the string from the index to the end
+            result = filepath[index+1:]  # +1 to include the character after the '/'
+            text = result + filename +  filetype + ' ' + self.classname_id
+            self.save_annotations_to_file(text)
+
+    def save_annotations_to_file(self, text):
+        directory = self.outdir + '/annotations/'
+        # Check if the directory exists
+        if not os.path.exists(directory):
+            # Create the directory if it does not exist
+            os.makedirs(directory)
+
+        # Open a file in write mode. If the file does not exist, it will be created.
+        with open(directory + 'labels.csv', 'a') as file:
+            # Write text to the filez
+            file.write('\n'+text)
 
     def set_filename_for_bags(self):
         filename = 'S' + self.timestamp + '-DALL-C' + self.classname_id

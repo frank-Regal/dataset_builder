@@ -3,11 +3,11 @@
     <rosparam file="$(find dataset_builder)/params/dicts.yaml" command="load"/>
 
     <!-- user input args -->
-    <arg name="robofleet" default='false'/>
-    <arg name="outdir" default="$(find dataset_builder)/dataset"/>
-    <arg name="classname" default="Attention"/>
+    <arg name="robofleet" default='true'/>
+    <arg name="outdir" default="$(find dataset_builder)/test_dataset"/>
+    <arg name="classname" default="Advance"/>
     <arg name="bagdata" default='true'/>
-    <arg name="image_fps" default="10"/>
+    <arg name="image_fps" default="15"/>
 
     <!-- configure topics -->
     <arg name="start_topic_name"  default="/hololens/natural_input_capture/start"/>
@@ -55,6 +55,7 @@
         <param name ="fps" value="$(arg image_fps)"/>
         <param name ="use_param_server" value='true'/>
         <param name ="save_multi_stream_in_sequence" value='true'/>
+        <param name ="filetype" value=".avi"/>
     </group>
 
     <!-- mono left front camera stream -->
@@ -66,6 +67,7 @@
         <param name ="fps" value="$(arg image_fps)"/>
         <param name ="use_param_server" value='true'/>
         <param name ="save_multi_stream_in_sequence" value='true'/>
+        <param name ="filetype" value=".avi"/>
     </group>
 
     <!-- mono right front camera stream -->
@@ -77,6 +79,7 @@
         <param name ="fps" value="$(arg image_fps)"/>
         <param name ="use_param_server" value='true'/>
         <param name ="save_multi_stream_in_sequence" value='true'/>
+        <param name ="filetype" value=".avi"/>
     </group>
    
     <!-- mono right right camera stream -->
@@ -88,12 +91,14 @@
         <param name ="fps" value="$(arg image_fps)"/>
         <param name ="use_param_server" value='true'/>
         <param name ="save_multi_stream_in_sequence" value='true'/>
+        <param name ="filetype" value=".avi"/>
     </group>
 
     <!-- microphone stream -->
     <group ns="mic">
         <rosparam file="$(find audio_writer)/params/params.yaml" command="load"/>
         <param name ="output_directory_" value="$(arg outdir)/devices/mic/raw/$(arg classname)/"/>
+        <param name ="filepath" value="$(arg outdir)/devices/mic/raw/$(arg classname)/"/>
         <param name ="postfix_" value=""/>
         <param name ="topic_name_" value="$(arg mic_topic)"/>
         <param name ="use_param_server" value='true'/>
@@ -101,6 +106,7 @@
         <param name ="queue_size_" value='100'/>
         <param name="start_recording_topic_" value="$(arg start_topic_name)"/>
         <param name="stop_recording_topic_" value="$(arg stop_topic_name)"/>
+        <param name ="filetype" value=".wav"/>
         <node
 	    	name    = "save_raw_audio_stream"
 	    	pkg     = "audio_writer"
