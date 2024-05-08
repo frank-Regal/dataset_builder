@@ -4,7 +4,8 @@
 
     <!-- user input args -->
     <arg name="robofleet" default='true'/>
-    <arg name="outdir" default="$(find dataset_builder)/test_dataset"/>
+    <!-- <arg name="outdir" default="/project/ws_dev/src/hri_cacti_xr/data/005_data"/> -->
+    <arg name="outdir" default="/project/ws_dev/src/hri_cacti_xr/dataset_builder/test"/>
     <arg name="classname" default="Advance"/>
     <arg name="bagdata" default='true'/>
     <arg name="image_fps" default="15"/>
@@ -24,6 +25,7 @@
     <param name="timestamp"         value=""/> <!-- set dynamically in config_params.py--> 
     <param name="base_outdir"       value="$(arg outdir)"/>
     <param name="stop_topic_name"   value="$(arg stop_topic_name)"/>
+    <param name="use_sim_time"      value="false" />
     
     <!-- robofleet client -->
     <group if="$(arg robofleet)" ns="robofleet"> 
@@ -116,7 +118,7 @@
     </group>
 
     <!-- bagger -->
-    <group ns="bag_util">
+    <group if="$(arg bagdata)" ns="bag_util">
         <rosparam file="$(find bag_utility)/params/params.yaml" />
         <param name="output_directory" value="$(arg outdir)/bags/" />
         <param name="postfix" value="" />
