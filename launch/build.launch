@@ -2,10 +2,10 @@
     <!-- load params -->
     <rosparam file="$(find dataset_builder)/params/dicts.yaml" command="load"/>
 
-    <!-- user input args -->
+    <!-- user input args S0508202732 Fix Setting Thing-->
     <arg name="robofleet" default='true'/>
-    <!-- <arg name="outdir" default="/project/ws_dev/src/hri_cacti_xr/data/005_data"/> -->
-    <arg name="outdir" default="/project/ws_dev/src/hri_cacti_xr/dataset_builder/test"/>
+    <arg name="outdir" default="/project/ws_dev/src/hri_cacti_xr/data/005_data"/>
+    <!-- <arg name="outdir" default="/project/ws_dev/src/hri_cacti_xr/dataset_builder/test"/> -->
     <arg name="classname" default="Advance"/>
     <arg name="bagdata" default='true'/>
     <arg name="image_fps" default="15"/>
