@@ -29,5 +29,6 @@ catkin_package(
 
 catkin_install_python(PROGRAMS
   scripts/config_params.py
+  scripts/start_stop.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
