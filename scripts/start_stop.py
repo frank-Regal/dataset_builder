@@ -28,7 +28,10 @@ def main():
     print("Press 's' to send start message")
     print("Press 'p' to send stop message")
     print("Press 'q' to quit")
+    print(f'\n')
 
+    pair_count = 0
+    waiting_for_stop = False
     # Set up terminal for non-blocking input
     fd = sys.stdin.fileno()
     old_settings = termios.tcgetattr(fd)
@@ -39,14 +42,26 @@ def main():
             char = getch()
 
             if char is not None:
-                if char == 's':
+                if char == 's' and not waiting_for_stop:
                     start_pub.publish(Empty())
-                    print("\nStart message sent!")
-                elif char == 'p':
+                    sys.stdout.write('\r')  # Return to start of line
+                    sys.stdout.flush()
+                    print(f"<= Start message sent. (Waiting for stop) =>", end="\n")
+                    print(f'', end="\r")
+                    waiting_for_stop = True
+                elif char == 'p' and waiting_for_stop:
                     stop_pub.publish(Empty())
-                    print("\nStop message sent!")
+                    sys.stdout.write('\r')  # Return to start of line
+                    sys.stdout.flush()
+                    pair_count += 1
+                    print(f"Stop message sent! (Collection #{pair_count} Complete)", end="\n")
+                    print(f'', end="\r")
+                    waiting_for_stop = False
                 elif char == 'q':
-                    print("\nExiting...")
+                    sys.stdout.write('\r')  # Return to start of line
+                    sys.stdout.flush()
+                    print(f"Exiting... Recorded {pair_count} start-stop pairs", end="\r")
+                    print(f'\n')
                     break
 
             rospy.sleep(0.1)  # Small sleep to prevent CPU hogging

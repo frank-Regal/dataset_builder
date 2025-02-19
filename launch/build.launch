@@ -4,7 +4,7 @@
 
     <!-- user input args S0508202732 Fix Setting Thing-->
     <arg name="robofleet" default='true'/>
-    <arg name="outdir" default="/project/ws_dev/src/hri_cacti_xr/data/005_data"/>
+    <arg name="outdir" default="/project/ws_dev/src/hri_cacti_xr/data/test_data"/>
     <!-- <arg name="outdir" default="/project/ws_dev/src/hri_cacti_xr/dataset_builder/test"/> -->
     <arg name="classname" default="Advance"/>
     <arg name="bagdata" default='true'/>
@@ -22,13 +22,13 @@
     <!-- set global params -->
     <param name="classname"         value="$(arg classname)"/>
     <param name="classname_id"      value=""/> <!-- set dynamically in config_params.py-->
-    <param name="timestamp"         value=""/> <!-- set dynamically in config_params.py--> 
+    <param name="timestamp"         value=""/> <!-- set dynamically in config_params.py-->
     <param name="base_outdir"       value="$(arg outdir)"/>
     <param name="stop_topic_name"   value="$(arg stop_topic_name)"/>
     <param name="use_sim_time"      value="false" />
-    
+
     <!-- robofleet client -->
-    <group if="$(arg robofleet)" ns="robofleet"> 
+    <group if="$(arg robofleet)" ns="robofleet">
         <arg name="rfconfig" default="$(env HRI_CACTI_XR_PATH)/robofleet/hl-ss-config.yaml"/>
 	    <node
 	    	name    = "robofleet_client"
@@ -40,14 +40,14 @@
     </group>
 
     <!-- config params node -->
-    <node 
-        ns="config_params_node" 
-        name = "config_params" 
-        pkg = "dataset_builder" 
-        type = "config_params.py" 
+    <node
+        ns="config_params_node"
+        name = "config_params"
+        pkg = "dataset_builder"
+        type = "config_params.py"
         output = "screen"
     />
-    
+
     <!-- mono left left camera stream -->
     <group ns="mono_ll">
         <include file="$(find image_writer)/launch/save_raw_image_stream.launch" />
@@ -83,7 +83,7 @@
         <param name ="save_multi_stream_in_sequence" value='true'/>
         <param name ="filetype" value=".avi"/>
     </group>
-   
+
     <!-- mono right right camera stream -->
     <group ns="mono_rr">
         <include file="$(find image_writer)/launch/save_raw_image_stream.launch" />
@@ -114,7 +114,7 @@
 	    	pkg     = "audio_writer"
 	    	type    = "save_raw_audio_stream"
 	    	output  = "screen"
-	    /> 
+	    />
     </group>
 
     <!-- bagger -->
