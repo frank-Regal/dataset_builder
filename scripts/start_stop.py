@@ -26,11 +26,23 @@ def main():
     start_pub_class = rospy.Publisher('/hri_cacti/dataset_capture/start/class', String, queue_size=1)
     stop_pub = rospy.Publisher('/hri_cacti/dataset_capture/stop', Empty, queue_size=1)
 
+    #TODO change name and multidigit
     print("Press 's' to send start message")
     print("Press 'p' to send stop message")
     print("Press 'q' to quit")
     print("Classes:")
     print("'1' : 'advance'")
+    print("'2' : 'approve'")
+    print("'3' : 'advance'")
+    print("'4' : 'approve'")
+    print("'5' : 'advance'")
+    print("'6' : 'approve'")
+    print("'7' : 'advance'")
+    print("'8' : 'approve'")
+    print("'9' : 'advance'")
+    print("'10' : 'approve'")
+    print("'11' : 'advance'")
+    print("'12' : 'approve'")
 
     pair_count = 0
     waiting_for_stop = False
@@ -68,11 +80,117 @@ def main():
 
                 elif char == '1' and not waiting_for_stop:
                     msg = String()
-                    msg.data = 'advance'
+                    msg.data = 'Advance'
                     start_pub_class.publish(msg)
                     sys.stdout.write('\r')
                     sys.stdout.flush()
                     print(f"<= Start msg sent for 'advance' (Waiting for stop) =>", end="\n")
+                    print(f'', end="\r")
+                    waiting_for_stop = True
+
+                elif char == '2' and not waiting_for_stop:
+                    msg = String()
+                    msg.data = 'Approve'
+                    start_pub_class.publish(msg)
+                    sys.stdout.write('\r')
+                    sys.stdout.flush()
+                    print(f"<= Start msg sent for 'approve' (Waiting for stop) =>", end="\n")
+                    print(f'', end="\r")
+                    waiting_for_stop = True
+                
+                elif char == '3' and not waiting_for_stop:
+                    msg = String()
+                    msg.data = 'Attention'
+                    start_pub_class.publish(msg)
+                    sys.stdout.write('\r')
+                    sys.stdout.flush()
+                    print(f"<= Start msg sent for 'approve' (Waiting for stop) =>", end="\n")
+                    print(f'', end="\r")
+                    waiting_for_stop = True
+                
+                elif char == '4' and not waiting_for_stop:
+                    msg = String()
+                    msg.data = 'Deitic'
+                    start_pub_class.publish(msg)
+                    sys.stdout.write('\r')
+                    sys.stdout.flush()
+                    print(f"<= Start msg sent for 'approve' (Waiting for stop) =>", end="\n")
+                    print(f'', end="\r")
+                    waiting_for_stop = True
+                
+                elif char == '5' and not waiting_for_stop:
+                    msg = String()
+                    msg.data = 'FollowMe'
+                    start_pub_class.publish(msg)
+                    sys.stdout.write('\r')
+                    sys.stdout.flush()
+                    print(f"<= Start msg sent for 'approve' (Waiting for stop) =>", end="\n")
+                    print(f'', end="\r")
+                    waiting_for_stop = True
+                
+                elif char == '6' and not waiting_for_stop:
+                    msg = String()
+                    msg.data = 'GoLeft'
+                    start_pub_class.publish(msg)
+                    sys.stdout.write('\r')
+                    sys.stdout.flush()
+                    print(f"<= Start msg sent for 'approve' (Waiting for stop) =>", end="\n")
+                    print(f'', end="\r")
+                    waiting_for_stop = True
+                
+                elif char == '7' and not waiting_for_stop:
+                    msg = String()
+                    msg.data = 'GoRight'
+                    start_pub_class.publish(msg)
+                    sys.stdout.write('\r')
+                    sys.stdout.flush()
+                    print(f"<= Start msg sent for 'approve' (Waiting for stop) =>", end="\n")
+                    print(f'', end="\r")
+                    waiting_for_stop = True
+                
+                elif char == '8' and not waiting_for_stop:
+                    msg = String()
+                    msg.data = 'Halt'
+                    start_pub_class.publish(msg)
+                    sys.stdout.write('\r')
+                    sys.stdout.flush()
+                    print(f"<= Start msg sent for 'approve' (Waiting for stop) =>", end="\n")
+                    print(f'', end="\r")
+                    waiting_for_stop = True
+                elif char == '9' and not waiting_for_stop:
+                    msg = String()
+                    msg.data = 'MoveForward'
+                    start_pub_class.publish(msg)
+                    sys.stdout.write('\r')
+                    sys.stdout.flush()
+                    print(f"<= Start msg sent for 'approve' (Waiting for stop) =>", end="\n")
+                    print(f'', end="\r")
+                    waiting_for_stop = True
+                elif char == '10' and not waiting_for_stop:
+                    msg = String()
+                    msg.data = 'MoveInReverse'
+                    start_pub_class.publish(msg)
+                    sys.stdout.write('\r')
+                    sys.stdout.flush()
+                    print(f"<= Start msg sent for 'approve' (Waiting for stop) =>", end="\n")
+                    print(f'', end="\r")
+                    waiting_for_stop = True
+                elif char == '11' and not waiting_for_stop:
+                    msg = String()
+                    msg.data = 'Rally'
+                    start_pub_class.publish(msg)
+                    sys.stdout.write('\r')
+                    sys.stdout.flush()
+                    print(f"<= Start msg sent for 'approve' (Waiting for stop) =>", end="\n")
+                    print(f'', end="\r")
+                    waiting_for_stop = True
+                elif char == '12' and not waiting_for_stop:
+                    msg = String()
+                    msg.data = 'Stop'
+                    start_pub_class.publish(msg)
+                    sys.stdout.write('\r')
+                    sys.stdout.flush()
+                    print(f"<= Start msg sent for 'approve' (Waiting for stop) =>", end="\n")
                     print(f'', end="\r")
                     waiting_for_stop = True
 
